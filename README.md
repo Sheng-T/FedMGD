@@ -4,20 +4,7 @@
 Federated learning achieves joint training of deep models by connecting decentralized data sources, which can significantly mitigate the risk of privacy leakage. However, in a more general case, the distributions of labels among clients are different, called "label distribution skew". Directly applying conventional federated learning without consideration of label distribution skew issue significantly hurts the performance of the global model. To this end, we propose a novel federated learning method, named FedMGD, to alleviate the performance degradation caused by the label distribution skew issue. It introduces a global Generative Adversarial Network to model the global data distribution without access to local datasets, so the global model can be trained using the global information of data distribution without privacy leakage. The experimental results demonstrate that our proposed method significantly outperforms the state-of-the-art on several public benchmarks.
 
 
- <table>
-    <tr>
-        <td align="center">
-            <img src="https://raw.githubusercontent.com/LuftmenschDevil/FedMGD/master/img/Generative%20Adversarial%20Stage.jpg"   alt="Generative Adversarial Stage"/>
-        </td>
-    	<td align="center">
-        	<img src="https://raw.githubusercontent.com/LuftmenschDevil/FedMGD/master/img/Federated%20Enhancement%20Stage.jpg"   alt="Federated Enhancement Stage" />
-    	</td>
-    </tr>
-	<tr>
-        <td align="center">(a) Generative Adversarial Stage</td>
-        <td align="center">(b) Federated Enhancement Stage</td>
-    </tr>
-</table>
+![FedMGD](https://raw.githubusercontent.com/LuftmenschDevil/FedMGD/master/img/FedMGD.png)
 
 
 ## Requirements
