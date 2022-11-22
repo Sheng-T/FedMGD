@@ -13,12 +13,12 @@ from matplotlib import pyplot as plt
 import re
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-if __name__ == '__main__':
+def main():
     opt = TrainOptions().parse()
-    train_dataset = create_dataset(opt,'train',opt.batch_size)
+    train_dataset = create_dataset(opt, 'train', opt.batch_size)
 
-    ctrain_dataset = create_dataset(opt,'train',opt.ctrain_batch_size)
-    ctest_dataset = create_dataset(opt, 'test',opt.ctest_batch_size)
+    ctrain_dataset = create_dataset(opt, 'train', opt.ctrain_batch_size)
+    ctest_dataset = create_dataset(opt, 'test', opt.ctest_batch_size)
     gtest_dataset = create_dataset(opt, 'global', opt.ctest_batch_size)
 
     dataset_size = len(train_dataset)
@@ -69,12 +69,13 @@ if __name__ == '__main__':
 
             iter_data_time = time.time()
 
-        if epoch % opt.save_epoch_freq == 0: # cache our model every <save_epoch_freq> epochs
+        if epoch % opt.save_epoch_freq == 0:  # cache our model every <save_epoch_freq> epochs
             print('saving the model at the end of epoch %d, iters %d' % (epoch, total_iters))
             model.save_networks('latest')
             model.save_networks(epoch)
 
-        print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch, opt.niter + opt.niter_decay, time.time() - epoch_start_time))
+        print('End of epoch %d / %d \t Time Taken: %d sec' % (
+        epoch, opt.niter + opt.niter_decay, time.time() - epoch_start_time))
         model.update_learning_rate()
 
     for k in range(opt.n_fold):
@@ -132,5 +133,8 @@ if __name__ == '__main__':
                 plt.title(f'{opt.n_fold} fold result')
                 plt.plot(x, label='fold {}'.format(fold))
                 plt.legend(loc='best')
-    plt.savefig(save_dir+ '/fold_result.png')
+    plt.savefig(save_dir + '/fold_result.png')
     plt.show()
+
+if __name__ == '__main__':
+    main()

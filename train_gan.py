@@ -8,9 +8,9 @@ from util.visualizer import Visualizer
 import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-if __name__ == '__main__':
+def mian():
     opt = TrainOptions().parse()
-    train_dataset = create_dataset(opt,'train',opt.batch_size)
+    train_dataset = create_dataset(opt, 'train', opt.batch_size)
     dataset_size = len(train_dataset)
     print('The number of training images = %d' % dataset_size)
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
             iter_data_time = time.time()
 
-        if opt.model=='fedgan' and epoch % opt.num_epochs == 0:
+        if opt.model == 'fedgan' and epoch % opt.num_epochs == 0:
             model.aggregate(epoch)
 
         if epoch % opt.save_epoch_freq == 0:
@@ -65,5 +65,9 @@ if __name__ == '__main__':
             model.save_networks('latest')
             model.save_networks(epoch)
 
-        print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch, opt.niter + opt.niter_decay, time.time() - epoch_start_time))
+        print('End of epoch %d / %d \t Time Taken: %d sec' % (
+        epoch, opt.niter + opt.niter_decay, time.time() - epoch_start_time))
         model.update_learning_rate()
+
+if __name__ == '__main__':
+    main()

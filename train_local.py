@@ -14,13 +14,12 @@ import re
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-if __name__ == '__main__':
+def main():
     opt = TrainOptions().parse()
 
-
     gtest_dataset = create_dataset(opt, 'global', opt.ctest_batch_size)
-    ctrain_dataset = create_dataset(opt,'train',opt.ctrain_batch_size)
-    ctest_dataset = create_dataset(opt, 'test',opt.ctest_batch_size)
+    ctrain_dataset = create_dataset(opt, 'train', opt.ctrain_batch_size)
+    ctest_dataset = create_dataset(opt, 'test', opt.ctest_batch_size)
 
     dataset_size = len(ctrain_dataset)
     print('The number of training images = %d' % dataset_size)
@@ -37,21 +36,20 @@ if __name__ == '__main__':
         model.setup(opt)
         total_iters = 0
 
-
-        for epoch in range(opt.epoch_count, opt.rounds +1):
+        for epoch in range(opt.epoch_count, opt.rounds + 1):
             print('>> train C in ({})/({})'.format(epoch, opt.rounds + 1))
             epoch_iter = 0
             for i, data in enumerate(ctrain_dataset):
                 model.set_input(data)
                 model.train_C(epoch)
 
-            closs , c_correct , c_num_all_samples = model.test_C(ctest_dataset,k)
+            closs, c_correct, c_num_all_samples = model.test_C(ctest_dataset, k)
 
             if epoch == opt.rounds:
                 for i in range(opt.n_client):
                     c_acc[i] += (100. * c_correct[i] / c_num_all_samples[i]).cpu().numpy().tolist()
                     c_loss[i] += closs[i]
-        loss, correct, num_all_samples, acc = model.test_and_save(gtest_dataset,k,'global')
+        loss, correct, num_all_samples, acc = model.test_and_save(gtest_dataset, k, 'global')
         g_acc.append(acc.cpu().numpy().tolist())
         g_loss.append(loss)
         gc.collect()
@@ -65,3 +63,6 @@ if __name__ == '__main__':
         for i in range(opt.n_client):
             f.write(f'client {i} local result acc:{c_acc[i] / opt.n_fold}, loss:{c_loss[i] / opt.n_fold}\n')
         f.close()
+
+if __name__ == '__main__':
+    main()

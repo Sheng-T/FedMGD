@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 import re
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-if __name__ == '__main__':
+def main():
     opt = TrainOptions().parse()
 
     gtest_dataset = create_dataset(opt, 'global', opt.ctest_batch_size)
@@ -35,13 +35,13 @@ if __name__ == '__main__':
         model.setup(opt)
         total_iters = 0
         for epoch in range(opt.epoch_count, opt.rounds * opt.num_epochs + 1):
-            print('>> train C in ({})/({})'.format(epoch,opt.rounds + 1))
+            print('>> train C in ({})/({})'.format(epoch, opt.rounds + 1))
 
             for i, data in enumerate(ctrain_dataset):
                 model.set_input(data)
                 model.train_C(epoch)
 
-            if epoch % opt.num_epochs  == 0:
+            if epoch % opt.num_epochs == 0:
                 if opt.model == 'fedgen':
                     model.train_G()
                 if 'feddf' in opt.model:
@@ -50,7 +50,7 @@ if __name__ == '__main__':
                     model.aggregate(epoch)
                 model.test_and_save(gtest_dataset, k, 'aggregate')
 
-            closs , c_correct , c_num_all_samples = model.test_C(ctest_dataset,k)
+            closs, c_correct, c_num_all_samples = model.test_C(ctest_dataset, k)
 
             if epoch % opt.save_epoch_freq == 0:
                 model.save_C()
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                     c_acc[i] += (100. * c_correct[i] / c_num_all_samples[i]).cpu().numpy().tolist()
                     c_loss[i] += closs[i]
 
-        loss, correct, num_all_samples, acc = model.test_and_save(gtest_dataset,k,'global')
+        loss, correct, num_all_samples, acc = model.test_and_save(gtest_dataset, k, 'global')
         g_acc.append(acc.cpu().numpy().tolist())
         g_loss.append(loss)
 
@@ -93,5 +93,8 @@ if __name__ == '__main__':
                 plt.title(f'{opt.n_fold} fold result')
                 plt.plot(x, label='fold {}'.format(fold))
                 plt.legend(loc='best')
-    plt.savefig(save_dir+ '/fold_result.png')
+    plt.savefig(save_dir + '/fold_result.png')
     plt.show()
+
+if __name__ == '__main__':
+    main()
