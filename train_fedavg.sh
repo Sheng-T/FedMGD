@@ -1,0 +1,1 @@
+python train_federated.py --dataroot your_data_path --name fedavg --gpu_ids 0,1 --checkpoints_dir ./result --model fedavg  --input_nc 1 --n_class 26 --n_client 5 --rounds 100 --num_epochs 10 --lr 0.0002
