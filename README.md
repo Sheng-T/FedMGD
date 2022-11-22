@@ -97,12 +97,6 @@ For example:
 | EMNIST  | 0.1  | 400+100 | [download](https://pan.baidu.com/s/1Fcscuflov2T223cjvI4GWQ?pwd=u4go) | [download](https://pan.baidu.com/s/1FKCZsnO_hloC_jUgGkFOhw?pwd=10mx) |   91.52±0.17 (↓0.13)   |
 
 
-|   Dataset    |  α   |  Epoch  |                            Model                             |                          Generator                           |         Acc(%)          |
-| :----------: | :--: | :-----: | :----------------------------------------------------------: | :----------------------------------------------------------: | :---------------------: |
-| FashionMNIST | 0.01 | 400+100 | [download](https://pan.baidu.com/s/1qFzJhnRyghaC8EhVA4Bfuw?pwd=za49) | [download](https://pan.baidu.com/s/1WEps_UjWjBbSp4pqPVptuA?pwd=ygs0) | **84.04±0.58 (↑13.02)** |
-| FashionMNIST | 0.05 | 400+100 | [download](https://pan.baidu.com/s/1St02ocZZ3HQqUml57uFRGA?pwd=si4k) | [download](https://pan.baidu.com/s/1zcyBPSI6JkBuw1C4PLPo2w?pwd=aqck) | **87.57±0.40 (↑3.90)**  |
-| FashionMNIST | 0.1  | 400+100 | [download](https://pan.baidu.com/s/15jkOFWZBdykVC6Hbwu1EzA?pwd=nxz7) | [download](https://pan.baidu.com/s/1bv_JCimkIafcFIrJK9a-7w?pwd=c39n) | **89.29±1.33 (↑1.01)**  |
-
 
 | Dataset |  α   |  Epoch  |                            Model                             |                          Generator                           |         Acc(%)         |
 | :-----: | :--: | :-----: | :----------------------------------------------------------: | :----------------------------------------------------------: | :--------------------: |
@@ -116,6 +110,13 @@ For example:
 | Cifar10 | 0.01 | 400+100 | [download](https://pan.baidu.com/s/1JuNDdv8721gw2pAxgPjFvg?pwd=2381) | [download](https://pan.baidu.com/s/1UXmCm8NStEpYach_14ezLA?pwd=uncu) | **62.61±1.54 (↑8.15)** |
 | Cifar10 | 0.05 | 400+100 | [download](https://pan.baidu.com/s/1uM9PCbSC9XTs-2hLfgBPUA?pwd=llml) | [download](https://pan.baidu.com/s/1bHVuOc5yAsafIJ9_qLP18A?pwd=5har) | **66.52±0.49 (↑2.24)** |
 | Cifar10 | 0.1  | 400+100 | [download](https://pan.baidu.com/s/1o3gLjwRnZbCDneeCO531rA?pwd=2hu9) | [download](https://pan.baidu.com/s/1U4yeTv731Tn6gzkVP67BhQ?pwd=sxc1) | **69.31±0.33 (↑1.94)** |
+
+
+|   Dataset    |  α   |  Epoch  |                            Model                             |                          Generator                           |         Acc(%)          |
+| :----------: | :--: | :-----: | :----------------------------------------------------------: | :----------------------------------------------------------: | :---------------------: |
+| FashionMNIST | 0.01 | 400+100 | [download](https://pan.baidu.com/s/1qFzJhnRyghaC8EhVA4Bfuw?pwd=za49) | [download](https://pan.baidu.com/s/1WEps_UjWjBbSp4pqPVptuA?pwd=ygs0) | **84.04±0.58 (↑13.02)** |
+| FashionMNIST | 0.05 | 400+100 | [download](https://pan.baidu.com/s/1St02ocZZ3HQqUml57uFRGA?pwd=si4k) | [download](https://pan.baidu.com/s/1zcyBPSI6JkBuw1C4PLPo2w?pwd=aqck) | **87.57±0.40 (↑3.90)**  |
+| FashionMNIST | 0.1  | 400+100 | [download](https://pan.baidu.com/s/15jkOFWZBdykVC6Hbwu1EzA?pwd=nxz7) | [download](https://pan.baidu.com/s/1bv_JCimkIafcFIrJK9a-7w?pwd=c39n) | **89.29±1.33 (↑1.01)**  |
 
 ## Acknowledgments
 We refer to the structure of [CycleGAN and pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) to build the code.
