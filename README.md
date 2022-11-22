@@ -1,8 +1,11 @@
-# Modeling Global Distribution for Federated Learning with Label Shift
+# Modeling Global Distribution for Federated Learning with Label Distribution Skew
 
 ## Abstract
-Federated learning achieves joint training of deep models by connecting decentralized data sources, which can significantly mitigate the risk of privacy leakage. However, in a more general case, the distributions of labels among clients is different, called "label shift". Directly applying conventional federated learning without consideration of label shift issue significantly hurts the performance of global model. To this end, we propose a novel federated learning method, named FedMGD, to alleviate the performance degradation caused by label shift issue. It introduces a global Generative Adversarial Network to model the global data distribution without access to local data of clients, so the global model can be trained using the global information of data distribution without privacy leakage. The experimental results demonstrate that our proposed method significantly outperforms the state-of-the-art on several public benchmarks.
+Federated learning achieves joint training of deep models by connecting decentralized data sources, which can significantly mitigate the risk of privacy leakage. However, in a more general case, the distributions of labels among clients are different, called "label distribution skew". Directly applying conventional federated learning without consideration of label distribution skew issue significantly hurts the performance of the global model. To this end, we propose a novel federated learning method, named FedMGD, to alleviate the performance degradation caused by the label distribution skew issue. It introduces a global Generative Adversarial Network to model the global data distribution without access to local datasets, so the global model can be trained using the global information of data distribution without privacy leakage. The experimental results demonstrate that our proposed method significantly outperforms the state-of-the-art on several public benchmarks.
 
+
+![Generative Adversarial Stage](./img/Generative Adversarial Stage.jpg)
+![Federated Enhancement Stage](./img/Federated Enhancement Stage.jpg)
 ## Requirements
 - torch
 - torchvision
@@ -25,7 +28,7 @@ For example:
 ## Get Started
 ### Example: the EMNIST dataset
 
-#### 1.Experiments to verify FedMGD performance in label shift.
+#### 1.Comparison with State-of-the-art Methods.
 - FedMGD
 ```
   python train_fedmgd.py    --dataroot your_data_root \
@@ -56,20 +59,46 @@ For example:
                             --num_epochs 10 \
                             --lr 0.0002 \
 ```
-#### 2.Experiments to evaluate the quality of the generated images.
-- (1) Replace the Collection of Data. 
-To FedDF(unlabeled real data)/ FedDF(labeled real data)
+#### 2.Ablation Experiment.
+- (1) Realistic Score in FedMGD. 
 
-    `python train_federated.py --model feddf --dataroot your_data_root`  
+    -  FedDF(unlabeled real data)
+        ```
+       python train_federated.py --model feddf --dataroot your_data_root
+        ```
+         
+    -  FedDF(labeled real data)
+        ```
+       python train_federated.py --model feddf_with_label --dataroot your_data_root
+        ```
 
-    `python train_federated.py --model feddf_with_data --dataroot your_data_root`
-  
-    `python train_fedmgd.py --model fedmgd_feddf --dataroot your_data_root`
+    -  FedMGD+FedDF(w/o real data)   
+        ```
+       python train_fedmgd.py --model fedmgd_feddf --dataroot your_data_root
+        ```
 
+    -  F2U+FedDF(unlabeled w/o real data)
+        ```
+       python train_gan.py --model f2u --dataroot your_data_root
+       python train_federated.py --model feddf --dataroot your_data_root --G_path f2u_model_path
+        ```
+        
 -   (2) Compare with other distributed GANs.
+       ```
+       python train_gan.py --model mdgan --dataroot your_data_root
+    
+       python train_gan.py --model fedgan --dataroot your_data_root
+    
+       python train_fedmgd.py --model fedmgd --dataroot your_data_root
+       ```
+## Models
 
-    `python train_gan.py --model mdgan --dataroot your_data_root`  
-    
-    `python train_gan.py --model fedgan --dataroot your_data_root` 
-    
-    `python train_fedmgd.py --model fedmgd --dataroot your_data_root` 
+|   Dataset    |  α   | Epoch |                            Model                             |                          Generator                           |
+| :----------: | :--: | :---: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| FashionMNIST | 0.01 |  100  | [download](https://pan.baidu.com/s/1qFzJhnRyghaC8EhVA4Bfuw?pwd=za49) | [download](https://pan.baidu.com/s/1WEps_UjWjBbSp4pqPVptuA?pwd=ygs0) |
+| FashionMNIST | 0.05 |  100  | [download](https://pan.baidu.com/s/1St02ocZZ3HQqUml57uFRGA?pwd=si4k) | [download](https://pan.baidu.com/s/1zcyBPSI6JkBuw1C4PLPo2w?pwd=aqck) |
+| FashionMNIST | 0.1  |  100  | [download](https://pan.baidu.com/s/15jkOFWZBdykVC6Hbwu1EzA?pwd=nxz7) | [download](https://pan.baidu.com/s/1bv_JCimkIafcFIrJK9a-7w?pwd=c39n) |
+
+
+## Acknowledgments
+We refer to the structure of [CycleGAN and pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) to build the code.

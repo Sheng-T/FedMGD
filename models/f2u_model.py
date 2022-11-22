@@ -55,9 +55,6 @@ class F2UModel(BaseModel):
                 self.optimizers.append(opt_D)
             self.optimizers.append(self.optimizer_G)
 
-
-
-
         self.weights = []
 
         print(self.netG)
