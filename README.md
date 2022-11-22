@@ -107,12 +107,11 @@ For example:
        ```
 ## Models
 
-|   Dataset    |  α   | Epoch |                            Model                             |                          Generator                           |
-| :----------: | :--: | :---: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| FashionMNIST | 0.01 |  100  | [download](https://pan.baidu.com/s/1qFzJhnRyghaC8EhVA4Bfuw?pwd=za49) | [download](https://pan.baidu.com/s/1WEps_UjWjBbSp4pqPVptuA?pwd=ygs0) |
-| FashionMNIST | 0.05 |  100  | [download](https://pan.baidu.com/s/1St02ocZZ3HQqUml57uFRGA?pwd=si4k) | [download](https://pan.baidu.com/s/1zcyBPSI6JkBuw1C4PLPo2w?pwd=aqck) |
-| FashionMNIST | 0.1  |  100  | [download](https://pan.baidu.com/s/15jkOFWZBdykVC6Hbwu1EzA?pwd=nxz7) | [download](https://pan.baidu.com/s/1bv_JCimkIafcFIrJK9a-7w?pwd=c39n) |
-
+|   Dataset    |  α   |  Epoch  |                            Model                             |                          Generator                           |         Acc(%)          |
+| :----------: | :--: | :-----: | :----------------------------------------------------------: | :----------------------------------------------------------: | :---------------------: |
+| FashionMNIST | 0.01 | 400+100 | [download](https://pan.baidu.com/s/1qFzJhnRyghaC8EhVA4Bfuw?pwd=za49) | [download](https://pan.baidu.com/s/1WEps_UjWjBbSp4pqPVptuA?pwd=ygs0) | **84.04±0.58 (↑13.02)** |
+| FashionMNIST | 0.05 | 400+100 | [download](https://pan.baidu.com/s/1St02ocZZ3HQqUml57uFRGA?pwd=si4k) | [download](https://pan.baidu.com/s/1zcyBPSI6JkBuw1C4PLPo2w?pwd=aqck) | **87.57±0.40 (↑3.90)**  |
+| FashionMNIST | 0.1  | 400+100 | [download](https://pan.baidu.com/s/15jkOFWZBdykVC6Hbwu1EzA?pwd=nxz7) | [download](https://pan.baidu.com/s/1bv_JCimkIafcFIrJK9a-7w?pwd=c39n) | **89.29±1.33 (↑1.01)**  |
 
 ## Acknowledgments
 We refer to the structure of [CycleGAN and pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) to build the code.
