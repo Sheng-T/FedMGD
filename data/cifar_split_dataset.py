@@ -27,7 +27,13 @@ class CIFARSplitDataset(BaseDataset):
     def __getitem__(self, index):
 
         if self.dataType == 'train':
-            result = {'weights': self.weights, 'max_num': self.max_num, 'label_of_client': self.label_of_client, 'fedgen_weights': self.fedgen_weights}
+            result = {'weights': self.weights, 'max_num': self.max_num, 'label_of_client': self.label_of_client}
+        elif self.opt.model == 'fedgen':
+            result = {'weights': self.weights, 'max_num': self.max_num, 'label_of_client': self.label_of_client,
+                      'fedgen_weights': self.fedgen_weights}
+        elif self.opt.model == 'fedlc':
+            result = {'weights': self.weights, 'max_num': self.max_num, 'label_of_client': self.label_of_client,
+                      'fedlc_weights': self.class2data_}
         else:
             result = {'weights': self.weights}
         for k, v in enumerate(self.split_db):
@@ -59,11 +65,22 @@ class CIFARSplitDataset(BaseDataset):
         self.label_weight = np.zeros((self.opt.n_client, 10))
         self.label_of_client = np.ones((self.opt.n_client, 10))
         num_of_labels_uagan = np.zeros((self.opt.n_client, 10))
+        self.class2data_ = []
         for i in range(self.opt.n_client):
             database = self.split_db[i]
             for k in range(10):
                 self.label_of_client[i][k] += np.sum(np.array(database.label) == k)
                 num_of_labels_uagan[i][k] = np.sum(np.array(database.label) == k)
+
+                class2data = np.zeros(self.opt.n_class)
+                if self.opt.model == 'fedlc':
+                    uniq_val, uniq_count = np.unique(np.array(database.label), return_counts=True)
+                    for j, c in enumerate(uniq_val.tolist()):
+                        class2data[int(c)] = uniq_count[j]
+                    if len(self.class2data_) == 0:
+                        self.class2data_ = class2data
+                    else:
+                        self.class2data_ = np.vstack((self.class2data_, class2data))
 
         num = np.sum(self.label_of_client, axis=1)
 

@@ -104,6 +104,8 @@ def define_G(input_nz, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = ACGANGenerator(input_nz, output_nc,img_size=img_size, num_classes=num_classes)
     elif netG == 'FedGEN':
         net = FedGENGenerator(n_class=num_classes, input_channel=output_nc,img_size = img_size ,gpu_ids = gpu_ids)
+    elif netG == 'Dense':
+        net = DenseGenerator(nz=256, ngf=64, img_size=img_size, nc=output_nc)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netG)
     return init_net(net, init_type, init_gain, gpu_ids)
@@ -124,6 +126,8 @@ def define_D(input_nc, ndf, netD, n_layers_D=3, norm='batch', init_type='normal'
         net = ACGANDiscriminator(input_nc,img_size=img_size,num_classes=num_classes)
     elif netD == 'Classifier':
         net = Classifier(input_nc,img_size=img_size,num_classes=num_classes)
+    elif netD == 'ClassifierBN':
+        net = ClassifierBN(input_nc,img_size=img_size,num_classes=num_classes)
     elif netD == 'resnet50':
         net = models.resnet50(pretrained=True)
         num_ftrs = net.fc.in_features
@@ -648,6 +652,45 @@ class Classifier(nn.Module):
         out = self.classifier(out)
         return out
 
+class ClassifierBN(nn.Module):
+
+    def __init__(self, input_nc,img_size=32, num_classes=10):
+        super().__init__()
+        self.image_size = img_size
+        self.features = nn.Sequential(
+            # conv1
+            nn.Conv2d(input_nc, img_size, kernel_size=5, stride=1, padding=2),
+            nn.BatchNorm2d(img_size),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+
+            # conv2
+            nn.Conv2d(img_size, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+
+        )
+        linear_input = computeMaxPool2d(computeConv(computeMaxPool2d(computeConv(img_size, 5, 1, 2), 3, 2, 1), 3, 1, 1),
+                                        3, 2, 1)
+        self.classifier = nn.Sequential(
+            nn.Linear(64 * linear_input * linear_input, 512),
+            nn.ReLU(inplace=True),
+            nn.Dropout(p=0.2),
+            nn.Linear(512, num_classes),
+        )
+        for layer in chain(self.features, self.classifier):
+            if isinstance(layer, (nn.Conv2d, nn.Linear)):
+                nn.init.xavier_uniform_(layer.weight)
+                nn.init.constant_(layer.bias, 0.0)
+
+    def forward(self, x, start_layer_idx = 0):
+        if start_layer_idx < 0:
+            return self.classifier(x)
+        x = self.features(x)
+        out = x.view(x.size(0), -1)
+        out = self.classifier(out)
+        return out
 
 class DiversityLoss(nn.Module):
 
@@ -729,7 +772,7 @@ class FedGENGenerator(nn.Module):
     def forward(self, labels, latent_layer_idx=-1, verbose=True):
 
         result = {}
-        batch_size = labels.shape[0] # 64
+        batch_size = labels.shape[0]
         eps = torch.rand((batch_size, self.noise_dim)).to(self.gpu_ids[0])
         if verbose:
             result['eps'] = eps
@@ -758,3 +801,32 @@ class FedGENGenerator(nn.Module):
         std = layer.view((layer.size(0), layer.size(1), -1)) \
             .std(dim=2, keepdim=True).unsqueeze(3)
         return (layer - mean) / std
+
+class DenseGenerator(nn.Module):
+    def __init__(self, nz=100, ngf=64, img_size=32, nc=3):
+        super(DenseGenerator, self).__init__()
+
+        self.init_size = img_size // 4
+        self.l1 = nn.Sequential(nn.Linear(nz, ngf * 2 * self.init_size ** 2))
+
+        self.conv_blocks = nn.Sequential(
+            nn.BatchNorm2d(ngf * 2),
+            nn.Upsample(scale_factor=2),
+
+            nn.Conv2d(ngf * 2, ngf * 2, 3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(ngf * 2),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Upsample(scale_factor=2),
+
+            nn.Conv2d(ngf * 2, ngf, 3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(ngf),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(ngf, nc, 3, stride=1, padding=1),
+            nn.Sigmoid(),
+        )
+
+    def forward(self, z):
+        out = self.l1(z)
+        out = out.view(out.shape[0], -1, self.init_size, self.init_size)
+        img = self.conv_blocks(out)
+        return img

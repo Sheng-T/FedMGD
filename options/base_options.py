@@ -22,7 +22,7 @@ class BaseOptions():
         parser.add_argument('--gpu_ids', type=str, default='6', help="gpu ids: e.g. 0  0,1,2, 0,2. use '' for CPU")
         parser.add_argument('--checkpoints_dir', type=str, default='./result', help='models are saved here')
         parser.add_argument('--img_size', type=int, default=32, help='image size')
-        parser.add_argument('--model', type=str, default='fedavg', help='chooses which model to use. [fedavg | fedprox | scaffold | feddf | fedmgd | fedmgd_feddf | mdgan | f2u ]')
+        parser.add_argument('--model', type=str, default='fedavg', help='chooses which model to use. [fedavg | fedprox | scaffold | feddf | fedmgd | fedmgd_feddf | mdgan | f2u | dense | fedlc ]')
         parser.add_argument('--input_nc', type=int, default=1, help='# of input image channels: 3 for RGB and 1 for grayscale')
         parser.add_argument('--n_class', type=int, default=26, help='number of classes')
         parser.add_argument('--n_client', type=int, default=5, help='number of client')
