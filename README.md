@@ -121,11 +121,13 @@ For example:
 ## Citing this work
 
 ```
-@article{sheng2022modeling,
-  title={Modeling Global Distribution for Federated Learning with Label Distribution Skew},
-  author={Sheng, Tao and Shen, Chengchao and Liu, Yuan and Ou, Yeyu and Qu, Zhe and Yixiong, Liang and Wang, Jianxin},
-  journal={arXiv preprint arXiv:2212.08883},
-  year={2022}
+@article{sheng2023modeling,
+    author    = {Sheng, Tao and Shen, Chengchao and Liu, Yuan and Ou, Yeyu and Qu, Zhe and Wang, Jianxin},
+    title     = {Modeling Global Distribution for Federated Learning with Label Distribution Skew},
+    journal   = {Pattern Recognition},
+    volume    = {143},
+    pages     = {109724},
+    year      = {2023}
 }
 ```
 
